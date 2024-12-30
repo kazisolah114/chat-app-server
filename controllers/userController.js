@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/userModel.js';
+import isAuthenticated from '../middleware/isAuthenticated.js';
 
 export const userRegister = async (req, res) => {
     try {
@@ -63,5 +64,23 @@ export const userLogout = async (req, res) => {
         res.status(200).json({ message: "User logged out!" })
     } catch (error) {
         res.send(error);
+    }
+}
+
+export const otherUsers = async (req, res) => {
+    try {
+        const otherUsers = await User.find({_id: {$ne: req.id}}).select("-password");
+        res.status(200).json(otherUsers)
+    } catch(error) {
+        res.status(401).json({error: error})
+    }
+}
+
+export const userData = async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.id})
+        res.status(200).json({user});
+    } catch(error) {
+        res.status(401).json({message: "An error has occured!"})
     }
 }
