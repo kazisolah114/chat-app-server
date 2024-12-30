@@ -50,6 +50,5 @@ export const userLogin = async (req, res) => {
         res.status(200).cookie("token", token, {maxAge: 1*24*60*60*1000, httpOnly: true, sameSite: 'strict'}).json({ message: "User login successfull!" })
     } catch (error) {
         res.status(500).json({ message: "An error occured while loggin in!", error })
-        console.log(error)
     }
 }
