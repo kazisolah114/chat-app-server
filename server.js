@@ -1,15 +1,16 @@
 import express from 'express';
 import { configDotenv } from 'dotenv';
 import connectDb from './config/connectDb.js';
+import userRoute from './routes/userRoute.js';
 const app = express();
 
+// Middlewear
 configDotenv();
+app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 
-app.get("/", (req, res) => {
-    res.send("Hello world!")
-})
+app.use("/api/user", userRoute)
 
 app.listen(PORT, () => {
     connectDb();
