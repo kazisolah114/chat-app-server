@@ -46,9 +46,17 @@ export const userLogin = async (req, res) => {
         const tokenData = {
             userId: user._id
         }
-        const token = await jwt.sign(tokenData, process.env.JWT_SECRETE_KEY, {expiresIn: '1d'});
-        res.status(200).cookie("token", token, {maxAge: 1*24*60*60*1000, httpOnly: true, sameSite: 'strict'}).json({ message: "User login successfull!" })
+        const token = await jwt.sign(tokenData, process.env.JWT_SECRETE_KEY, { expiresIn: '1d' });
+        res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({ message: "User login successfull!" })
     } catch (error) {
         res.status(500).json({ message: "An error occured while loggin in!", error })
+    }
+}
+
+export const userLogout = async (req, res) => {
+    try {
+        res.status(200).cookie("token", "", { maxAge: 0, httpOnly: true, sameSite: 'strict' }).json({ message: "User logged out!" })
+    } catch (error) {
+        res.send(error);
     }
 }
