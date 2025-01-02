@@ -4,12 +4,18 @@ import connectDb from './config/connectDb.js';
 import userRoute from './routes/userRoute.js';
 import messageRoute from './routes/messageRoute.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 const app = express();
 
 // Middlewear
 configDotenv();
 app.use(cookieParser());
 app.use(express.json());
+const corsOption = {
+    origin: 'http://localhost:3000',
+    credentials: true
+};
+app.use(cors(corsOption));
 
 const PORT = process.env.PORT || 8080;
 
