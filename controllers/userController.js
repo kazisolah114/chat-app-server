@@ -37,6 +37,7 @@ export const userLogin = async (req, res) => {
             return res.status(400).json({ message: "Username and Password fields are required!" })
         }
         const user = await User.findOne({ username });
+        
         if (!user) {
             return res.status(400).json({ message: "Incorrect username or password!", success: false })
         }
@@ -47,8 +48,9 @@ export const userLogin = async (req, res) => {
         const tokenData = {
             userId: user._id
         }
+        const userData = await User.findOne({ username }).select("-password")
         const token = await jwt.sign(tokenData, process.env.JWT_SECRETE_KEY, { expiresIn: '1d' });
-        res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({ message: "User login successfull!" })
+        res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({ success: true, message: "User login successfull!", userData })
     } catch (error) {
         res.status(500).json({ message: "An error occured while loggin in!", error })
     }
